@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'blog',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +78,7 @@ WSGI_APPLICATION = 'my_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blogdb',
+        'NAME': 'my_blogdb',
         'USER':'postgres',
         'PASSWORD':'mohsenamoon',
         'PORT' : '5433',
@@ -122,3 +124,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'dramatic225@gmail.com'
+EMAIL_HOST_PASSWORD = 'mohsen1160417237'
+EMAIL_USE_TLS = True

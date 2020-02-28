@@ -1,0 +1,67 @@
+{% extends 'blog/base.html' %}
+{% load blog_tags %}
+
+{% block title %}
+	{{ post.title }}
+{% endblock %}
+
+{% block content %}
+	 <h1>{{ post.title }}</h1><br>
+	 <p class="info">{{ post.publish }} by {{ post.author }}</p>
+	 <p class="tags">Tags:
+	 	{% for tag in post.tags.all %}
+	 		<a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+	 	{% endfor %}
+	 </p><br>
+	 <p>{{ post.body|markdown }}</p><br><br>
+	 <a href="{% url 'blog:post_share' post.id %}">Share</a><br><br>
+	 {% if similar_posts %}
+	 	<h4>Related posts</h4><br>
+	 {% endif %}
+	 {% for post in similar_posts %}
+	 	<h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+	 	<p class="tags">Tags:
+	 		{% for tag in post.tags.all %}
+	 			<a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+	 		{% endfor %}
+	 	</p>
+	 	<p>{{ post.body|truncatewords:10 }}</p><br><br>
+	 {% endfor %}
+
+	<h5>{{ comments.count }} comment{{ comments.count|pluralize }}</h5><br>
+	{% for comment in comments %}
+		<h3>{{ comment.name }}</h3>
+		<p class="info">{{ comment.created }} by {{ comment.name }}</p>
+		<p>{{ comment.content }}</p><br><br><br>
+	{% endfor %}
+
+
+	{% if new_comment %}
+		<h3>New comment added</h3><br><br>
+		<h4>Add new comment</h4>
+	<form action="." method="post">
+		{% for field in form %}
+			<div>
+				{{ field.errors }}
+				{{ field.label_tag }}<br>
+				{{ field }}
+			</div>
+			{% csrf_token %}
+		{% endfor %}
+		<input type="submit" value="Add comment">
+	</form>
+	{% else %}
+		<h3>Add new comment</h3>
+	<form action="." method="post">
+		{% for field in form %}
+			<div>
+				{{ field.errors }}
+				{{ field.label_tag }}<br>
+				{{ field }}
+			</div>
+			{% csrf_token %}
+		{% endfor %}
+		<input type="submit" value="Add comment">
+	</form>
+	{% endif %}
+{% endblock %}
